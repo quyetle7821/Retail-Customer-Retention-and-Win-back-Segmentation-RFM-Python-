@@ -108,3 +108,95 @@ Tools Used: Python (Pandas)
 
 ## 3. 🧹 Data Cleaning & Preprocessing
 
+### 🛠 Step 1. Imports (setup library)
+
+<img width="1737" height="230" alt="image" src="https://github.com/user-attachments/assets/95e0b5e1-f73c-4255-9536-767e5986b515" />
+
+### 🛠 Step 2. Load + clean + revenue
+
+[In 2]:
+
+<img width="1742" height="470" alt="image" src="https://github.com/user-attachments/assets/02d61fa8-8877-4a20-8726-0b29cc9a3db3" />
+
+
+[Out 2] :
+
+<img width="1768" height="279" alt="image" src="https://github.com/user-attachments/assets/dbb24e70-7d2f-4990-8e77-72b33e6da564" />
+
+### 🔎 Observations
+From the raw transaction data, a few quality issues can affect RFM results:
+
+- **Missing values** may appear in key fields (especially `CustomerID`), which prevents customer-level aggregation.
+- **Invalid transactions** can exist (e.g., `Quantity <= 0` or `UnitPrice <= 0`), often related to cancellations/returns or data entry errors.
+- The dataset is **transaction line-item level**, meaning one invoice can have multiple rows → requires aggregation later for Frequency/Monetary.
+
+### 🧠 Why these cleaning rules?
+To build a reliable RFM dataset, I applied minimal but essential rules:
+
+- **Convert data types** (`InvoiceDate` to datetime, `UnitPrice/Quantity` to numeric)  
+  → ensures calculations (Recency, Revenue) are accurate and consistent.
+- **Drop rows missing required fields** (`CustomerID`, `InvoiceDate`, `UnitPrice`, `Quantity`)  
+  → RFM is computed per customer and requires valid timestamps and transaction values.
+- **Keep only `UnitPrice > 0` and `Quantity > 0`**  
+  → removes cancellations/returns and invalid records so Monetary isn’t distorted.
+- **Create `Revenue = UnitPrice × Quantity`**  
+  → provides the Monetary metric at line-item level for later customer aggregation.
+
+### ✅ Output of this section
+After preprocessing, the dataset is ready for the RFM model:
+
+- All remaining records have valid `CustomerID` and `InvoiceDate`
+- Invalid or non-positive transactions are excluded
+- A new `Revenue` column is created for Monetary calculation
+
+➡️ The cleaned transaction table will be aggregated at customer level in the next step to compute **Recency, Frequency, and Monetary**.
+
+## 4. 🧮 Apply RFM Model
+
+### 🛠 Step 1. Build RFM Metrics (Customer-level)
+
+[In 3]:
+
+<img width="1756" height="526" alt="image" src="https://github.com/user-attachments/assets/a171fae4-a7f9-449e-b969-1dfbff8eafaf" />
+
+[Out 3]:
+
+<img width="512" height="240" alt="image" src="https://github.com/user-attachments/assets/b112eba9-dcb5-4c8c-b490-4d6396c55545" />
+
+### 🛠 Step 2. Score RFM & Create RFM Code
+
+[In 4]:
+
+<img width="1769" height="261" alt="image" src="https://github.com/user-attachments/assets/00b82163-7312-4c8a-81b3-2792b5c000e4" />
+
+[Out 4]:
+
+<img width="699" height="210" alt="image" src="https://github.com/user-attachments/assets/37b258c0-b624-46c2-aab9-78b8f0d13a89" />
+
+
+### 🛠 Step 3 — Map RFM Code to Business Segments
+
+[In 5]
+
+<img width="1493" height="650" alt="image" src="https://github.com/user-attachments/assets/534f7154-f17d-4ae2-a92a-9f492ade8a04" />
+
+[Out 5] 
+
+<img width="1006" height="264" alt="image" src="https://github.com/user-attachments/assets/1ef4601b-2700-4229-a48d-6e76e895d8da" />
+
+[In 6]
+
+<img width="883" height="611" alt="image" src="https://github.com/user-attachments/assets/177d2881-2b86-4e54-a2b6-daddcb98af68" />
+
+[Out 6] : 
+
+<img width="1082" height="220" alt="image" src="https://github.com/user-attachments/assets/fa8dc70d-f627-4ede-93ed-65fc652c4e85" />
+
+
+
+
+## 5. 💡 Exploratory Data Analysis (EDA) & Recommendations.
+
+
+
+
